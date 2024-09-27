@@ -1,38 +1,60 @@
-.App {
+* {
+  margin: 10px auto;
+  padding: 5px;
+}
+
+html {
+  box-sizing: border-box;
   text-align: center;
+  background-color: darkolivegreen;
+  color:burlywood;
+  font-family: Times;
+  margin: 25px;
+  border: 2px dashed burlywood;
+  border-radius: 45px;
 }
 
-.App-logo {
-  height: 40vmin;
-  pointer-events: none;
+h1 {
+  font-family: Times;
+  font-weight: bold;
+  font-size: 325%;
 }
 
-@media (prefers-reduced-motion: no-preference) {
-  .App-logo {
-    animation: App-logo-spin infinite 20s linear;
-  }
-}
-
-.App-header {
-  background-color: #282c34;
-  min-height: 100vh;
+.lengths {
   display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  font-size: calc(10px + 2vmin);
-  color: white;
+  flex-direction: row;
+  gap: 15px;
+  font-family: Times;
 }
 
-.App-link {
-  color: #61dafb;
+#break-component, #session-component {
+  border: 1px solid burlywood;
+  border-radius: 25px;
 }
 
-@keyframes App-logo-spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
+#timer-component {
+  font-family: Times;
+  border: 3px double burlywood;
+  border-radius: 35px;
 }
+
+#time-left {
+  font-size: 250%;
+  font-weight: bold;
+}
+
+button {
+  background-color: burlywood;
+  font-weight: bold;
+  border: 1px solid darkolivegreen;
+  height: 25px;
+  min-width: 25px;
+  color: darkolivegreen;
+  border-radius: 15px;
+}
+
+button:hover {
+  background-color: rgb(134, 161, 85);
+  border: 1px solid rgb(51, 65, 28);
+  color: rgb(51, 65, 28);
+ }
