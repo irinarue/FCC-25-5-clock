@@ -2,13 +2,13 @@ import './App.css';
 import React, {Component} from 'react';
 import { configureStore } from '@reduxjs/toolkit';
 import { Provider, connect } from 'react-redux';
+import 'bootstrap-icons/font/bootstrap-icons.css';
 
 //Redux
 const defaultState = {
   break: 5,
   session: 25,
   sessionMode: true,
-  IsRunning: false
 };
 
 const INC_BREAK = "INC_BREAK";
@@ -16,7 +16,6 @@ const DEC_BREAK = "DEC_BREAK";
 const INC_SESSION = "INC_SESSION";
 const DEC_SESSION = "DEC_SESSION";
 const CHANGE_MODE = "CHANGE_MODE";
-const PLAY_PAUSE = "PLAY_PAUSE";
 const RESET = "RESET";
 
 const reducer = (state = defaultState, action) => {
@@ -41,10 +40,6 @@ const reducer = (state = defaultState, action) => {
       return {
         ...state,
         sessionMode: !state.sessionMode};
-    case PLAY_PAUSE:
-      return {
-        ...state,
-        isRunning: !state.isRunning};
     case RESET:
       return {
         ...defaultState};
@@ -60,7 +55,6 @@ const decBreakAction = () => ({type: DEC_BREAK});
 const incSessionAction = () => ({type: INC_SESSION});
 const decSessionAction = () => ({type: DEC_SESSION});
 const changeModeAction = () => ({type: CHANGE_MODE});
-const playPausAction = () => ({type: PLAY_PAUSE});
 const resetAction = () => ({type: RESET});
 
 
@@ -132,6 +126,7 @@ class Timer extends Component {
       currentTime: `${this.props.session}:00`,
       timerInterval: null,
       timerIsRunning: false,
+      alarmOn: false,
       count: 1
     };
 
@@ -139,7 +134,9 @@ class Timer extends Component {
     this.startOrStop = this.startOrStop.bind(this);
     this.updateState = this.updateState.bind(this);
     this.switchMode = this.switchMode.bind(this);
+    this.playAlarm = this.playAlarm.bind(this);
     this.runTimer = this.runTimer.bind(this);
+   // this.disableButtons = this.disableButtons.bind(this);
   };
 
   componentDidMount() {
@@ -165,12 +162,17 @@ class Timer extends Component {
   reset(){
     clearInterval(this.state.timerInterval);
     this.props.resetActionCall();
+    setTimeout(()=>{
     this.setState({
       mode: this.props.sessionMode ? "Session" : "Break",
       timerIsRunning: false,
       timerInterval: null,
+      alarmOn: false,
       count: 1
-    });
+    });}, 0)
+    const audio = document.getElementById("beep");
+    audio.currentTime = 0;
+    audio.pause();
   };
 
   switchMode() {
@@ -191,7 +193,20 @@ class Timer extends Component {
 
     this.runTimer();
   }, 0);
+  };
+
+  playAlarm(){
+    const audio = document.getElementById("beep");
+    audio.currentTime = 0;
+    audio.play().catch((e)=> {
+      console.log("Error playing audio: " + e);
+    });
+    setTimeout(() =>{
+      audio.currentTime = 0;
+      audio.pause();
+    }, 3000)
   }
+
 
   runTimer() {
     if(this.state.timerInterval !== null) {
@@ -200,8 +215,6 @@ class Timer extends Component {
 
     let [minutes, seconds] = this.state.currentTime.split(":").map(Number);
     let totMiliseconds = (minutes * 60 + seconds) * 1000;
-
-    // let alarm = new Audio('alarm.mp3');
 
     const timeInterval = setInterval(() => {
         let timeLeft = totMiliseconds - (1000 * this.state.count);
@@ -218,7 +231,7 @@ class Timer extends Component {
          count: prevState.count +1,
         }));
       } else {
-       // alarm.play();
+        this.playAlarm();
         clearInterval(this.state.timerInterval); 
         this.switchMode();
       }
@@ -227,9 +240,25 @@ class Timer extends Component {
     this.setState({
       timerInterval: timeInterval
     });
-  }
+  };
+
+  //disables Buttons, when the timer is running, not activated due to FCC test errors
+  /*disableButtons(){
+    if(!this.state.timerIsRunning){
+      document.getElementById("break-decrement").disabled = true;
+      document.getElementById("break-increment").disabled = true;
+      document.getElementById("session-decrement").disabled = true;
+      document.getElementById("session-increment").disabled = true;
+    } else {
+      document.getElementById("break-decrement").disabled = false;
+      document.getElementById("break-increment").disabled = false;
+      document.getElementById("session-decrement").disabled = false;
+      document.getElementById("session-increment").disabled = false;
+    }
+  }*/
 
   startOrStop(){
+   // this.disableButtons();
     if(!this.state.timerIsRunning){
       this.runTimer();
       this.setState({
@@ -251,8 +280,9 @@ class Timer extends Component {
       <div id='timer-component'>
         <h2 id='timer-label'>{this.state.mode}</h2>
         <div id="time-left">{this.state.currentTime}</div>
-        <button id='start_stop' onClick={this.startOrStop}>start/stop</button>
-        <button id='reset' onClick={this.reset}>reset</button>
+        <button id='start_stop' onClick={this.startOrStop}>{this.state.timerIsRunning ? (<i className='bi bi-pause-fill'></i>) : (<i className='bi bi-play-fill'></i>)}</button>
+        <button id='reset' onClick={this.reset}><i className='bi bi-arrow-counterclockwise'></i></button>
+        <audio id='beep' src='https://cdn.freecodecamp.org/testable-projects-fcc/audio/BeepSound.wav' ></audio>
       </div>
     );
   };
@@ -264,7 +294,6 @@ const mapStateToProps = (state) => ({
   break: state.break,
   session: state.session,
   sessionMode: state.sessionMode,
-  timerIsRunning: state.isRunning,
 });
 
 const mapDispatchToProps = (dispatch) => {
@@ -274,7 +303,6 @@ const mapDispatchToProps = (dispatch) => {
     incSessionActionCall: function(){dispatch(incSessionAction())},
     decSessionActionCall: function(){dispatch(decSessionAction())},
     changeModeActionCall: function(){dispatch(changeModeAction())},
-    playPausActionCall: function(){dispatch(playPausAction())},
     resetActionCall: function(){dispatch(resetAction())},
   };
 };
