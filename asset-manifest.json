@@ -1,0 +1,17 @@
+{
+  "files": {
+    "main.css": "/FCC-25-5-clock/static/css/main.b908d091.css",
+    "main.js": "/FCC-25-5-clock/static/js/main.98d56892.js",
+    "static/js/453.84dfa2ec.chunk.js": "/FCC-25-5-clock/static/js/453.84dfa2ec.chunk.js",
+    "static/media/bootstrap-icons.woff?": "/FCC-25-5-clock/static/media/bootstrap-icons.39795c0b4513de014cf8.woff",
+    "static/media/bootstrap-icons.woff2?": "/FCC-25-5-clock/static/media/bootstrap-icons.b7bcc075b395c14ce8c2.woff2",
+    "index.html": "/FCC-25-5-clock/index.html",
+    "main.b908d091.css.map": "/FCC-25-5-clock/static/css/main.b908d091.css.map",
+    "main.98d56892.js.map": "/FCC-25-5-clock/static/js/main.98d56892.js.map",
+    "453.84dfa2ec.chunk.js.map": "/FCC-25-5-clock/static/js/453.84dfa2ec.chunk.js.map"
+  },
+  "entrypoints": [
+    "static/css/main.b908d091.css",
+    "static/js/main.98d56892.js"
+  ]
+}
